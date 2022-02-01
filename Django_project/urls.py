@@ -22,4 +22,11 @@ urlpatterns = [
     path('home/', views.home),
     path('users_list/', views.users_list),
     path('users_add/', views.users_add),
+    path('reused_model/', views.reused_model),
+    path('friends/', views.friends),
+
+    # 好朋友信息管理系统
+    path('friends/info', views.friends_info_list),
+    path('friends/add', views.friends_add),
+    path('friends/delete', views.friends_delete),
 ]

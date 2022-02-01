@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>添加用户</h1>
+<form method="post" action="/friends/add">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="你的大名">
+    <input type="text" name="birthday" placeholder="你的生日">
+    <input type="text" name="hobby" placeholder="你的爱好">
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>

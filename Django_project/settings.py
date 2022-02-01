@@ -73,10 +73,21 @@ WSGI_APPLICATION = 'Django_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}'''
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'hxx',  # 数据库名字
+        'USER': 'root',
+        'PASSWORD': 'hexihexiang2000',
+        'HOST': '127.0.0.1',  # 那台机器安装了MySQL
+        'PORT': 3306,
     }
 }
 

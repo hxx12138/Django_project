@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>模版语法的学习</h1>
+
+<div>{{ n1 }}</div>
+<div>爱好：{{ h1 }}</div>
+<hr>
+<div>爱好：{{ h1.0 }}</div>
+<div>爱好：{{ h1.1 }}</div>
+<div>爱好：{{ h1.2 }}</div>
+<div>
+    {% for item in h1 %}
+        <span>
+            {{ item }}
+        </span>
+    {% endfor %}
+</div>
+<hr/>
+
+<div>{{ f1 }}</div>
+<div>
+    {{ f1.name }}
+</div>
+<ul>
+    {% for k,v in f1.items%}
+        <li>{{ k }} = {{ v }}</li>
+    {% endfor %}
+</ul>
+<hr/>
+
+<div>
+    {{ l1 }}
+</div>
+
+<div>
+    {% for item in l1 %}
+        <div>{{ item }}</div>
+    {% endfor %}
+</div>
+<hr/>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>hxx的好朋友们</h1>
+    <a href="/friends/add">添加</a>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>name</th>
+            <th>birthday</th>
+            <th>hobby</th>
+            <th>operate</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for obj in data_list %}
+        <tr>
+            <td>{{ obj.id }}</td>
+            <td>{{ obj.name }}</td>
+            <td>{{ obj.birthday }}</td>
+            <td>{{ obj.hobby }}</td>
+            <td>
+                <a href="/friends/delete?nid={{ obj.id }}">删除</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>
