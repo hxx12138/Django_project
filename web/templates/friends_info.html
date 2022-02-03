@@ -1,13 +1,31 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
 </head>
 <body>
-    <h1>hxx的好朋友们</h1>
-    <a href="/friends/add">添加</a>
-<table border="1">
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h1>hxx的好朋友们</h1>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="container">
+    <button type="button" class="btn btn-info">
+        <a href="/friends/add">添加好友</a>
+    </button>
+</div>
+<br>
+<div class="container" style="background-color: azure;">
+<table class="table table-hover table-responsive">
+    <caption>好友信息列表</caption>
     <thead>
         <tr>
             <th>ID</th>
@@ -31,5 +49,6 @@
     {% endfor %}
     </tbody>
 </table>
+</div>
 </body>
 </html>
