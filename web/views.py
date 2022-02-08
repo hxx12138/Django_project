@@ -93,6 +93,12 @@ def friends_add(req):
 
 
 def friends_delete(req):
+    # 删除朋友
     nid = req.GET.get('nid')
     friends_info.objects.filter(id=nid).delete()
     return redirect("/friends/info")
+
+
+def friends_edit(req):
+    # 修改信息
+    return render(req, "friends_edit.html")

@@ -29,4 +29,5 @@ urlpatterns = [
     path('friends/info', views.friends_info_list),
     path('friends/add', views.friends_add),
     path('friends/delete', views.friends_delete),
+    path('friends/edit', views.friends_edit),
 ]
