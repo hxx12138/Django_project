@@ -1,5 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 from web.models import friends_info
+
+
 # Create your views here.
 
 
@@ -16,7 +18,6 @@ def users_add(request):
 
 
 def reused_model(request):
-
     name = "hxx"
 
     hobby = ["画画", "调酒", "排球"]
@@ -64,7 +65,6 @@ def data_process():
     # row_obj = UserInfo.objects.filter(id=1).first()
     # print(row_obj.id, row_obj.name, row_obj.password, row_obj.age)
 
-
     # #### 4.更新数据 ####
     # UserInfo.objects.all().update(password=999)
     # UserInfo.objects.filter(id=2).update(age=999)
@@ -73,7 +73,8 @@ def data_process():
 
 
 def friends_info_list(req):
-    data_list = friends_info.objects.all()
+    #data_list = friends_info.objects.all()
+    data_list = friends_info.objects.all().order_by('birthday')
 
     return render(req, "friends_info.html", {"data_list": data_list})
 
@@ -100,5 +101,20 @@ def friends_delete(req):
 
 
 def friends_edit(req):
-    # 修改信息
-    return render(req, "friends_edit.html")
+    nid = req.GET.get('nid')
+    if req.method == 'GET':
+        # 修改信息
+
+        # print(nid)
+        info_tobe_edited = friends_info.objects.filter(id=nid).first()
+        #print(info_tobe_edited)
+
+        return render(req, "friends_edit.html", {'info': info_tobe_edited})
+        #return render(req, "friends_edit.html")
+    name = req.POST.get("name")
+    birthday = req.POST.get("birthday")
+    hobby = req.POST.get("hobby")
+
+    friends_info.objects.filter(id=nid).update(name=name,birthday=birthday,hobby=hobby)
+    return redirect("/friends/info")
+
