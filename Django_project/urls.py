@@ -30,4 +30,5 @@ urlpatterns = [
     path('friends/add', views.friends_add),
     path('friends/delete', views.friends_delete),
     path('friends/edit', views.friends_edit),
+    path('friends/echart', views.friends_echart),
 ]

@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from web.models import friends_info
+import datetime
 
 
 # Create your views here.
@@ -35,7 +36,7 @@ def reused_model(request):
 
 
 def friends(request):
-    return render("friends.html")
+    return render(request, "friends.html")
 
 
 def data_process():
@@ -73,7 +74,7 @@ def data_process():
 
 
 def friends_info_list(req):
-    #data_list = friends_info.objects.all()
+    # data_list = friends_info.objects.all()
     data_list = friends_info.objects.all().order_by('birthday')
 
     return render(req, "friends_info.html", {"data_list": data_list})
@@ -107,14 +108,35 @@ def friends_edit(req):
 
         # print(nid)
         info_tobe_edited = friends_info.objects.filter(id=nid).first()
-        #print(info_tobe_edited)
+        # print(info_tobe_edited)
 
         return render(req, "friends_edit.html", {'info': info_tobe_edited})
-        #return render(req, "friends_edit.html")
+        # return render(req, "friends_edit.html")
     name = req.POST.get("name")
     birthday = req.POST.get("birthday")
     hobby = req.POST.get("hobby")
 
-    friends_info.objects.filter(id=nid).update(name=name,birthday=birthday,hobby=hobby)
+    friends_info.objects.filter(id=nid).update(name=name, birthday=birthday, hobby=hobby)
     return redirect("/friends/info")
 
+
+def friends_echart(req):
+    data_list = friends_info.objects.all().order_by('birthday')
+    age_dict = {}
+    now = datetime.date.today().year
+    # print(now)
+    for obj in data_list:
+        age = now - obj.birthday.year
+        if age not in age_dict:
+            age_dict[age] = 1
+        else:
+            age_dict[age] += 1
+    age_list = list(age_dict.keys())
+    age_value = list(age_dict.values())
+
+    '''pie_graph_data = []
+    for k, v in age_dict.items():
+        pie_graph_data.append({value: v, name: k})
+    print(pie_graph_data)'''
+
+    return render(req, 'friends_echart.html', {'age_list': age_list, 'age_value': age_value, 'age_dict':age_dict})

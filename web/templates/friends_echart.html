@@ -1,0 +1,84 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <h1 class="text-center">年龄分布图</h1>
+        <div id="main" style="width: 1200px;height:600px;"></div>
+        <script type="text/javascript">
+            var chartDom = document.getElementById('main');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            option = {
+                xAxis: {
+                    type: 'category',
+                    data: {{ age_list }},
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        data: {{ age_value }},
+                        type: 'bar'
+                    }
+                ]
+            };
+
+            option && myChart.setOption(option);
+        </script>
+        <div id="main1" style="width: 1200px;height:600px;"></div>
+        <script type="text/javascript">
+            var chartDom = document.getElementById('main1');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            option = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    top: '5%',
+                    left: 'center'
+                },
+                series: [
+                    {
+                        name: 'Access From',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: '40',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: [
+                            {% for k,v in age_dict.items %}
+                            {value: {{ v }}, name: {{k}}},
+                            {% endfor %}
+                        ]
+                    }
+                ]
+            };
+
+            option && myChart.setOption(option);
+
+        </script>
+    </div>
+
+{% endblock %}
