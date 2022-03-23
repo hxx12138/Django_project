@@ -1,6 +1,9 @@
 from django.shortcuts import render, HttpResponse, redirect
 from web.models import friends_info
 import datetime
+import jieba
+import jieba.analyse
+import collections
 
 
 # Create your views here.
@@ -139,4 +142,35 @@ def friends_echart(req):
         pie_graph_data.append({value: v, name: k})
     print(pie_graph_data)'''
 
-    return render(req, 'friends_echart.html', {'age_list': age_list, 'age_value': age_value, 'age_dict':age_dict})
+    return render(req, 'friends_echart.html', {'age_list': age_list, 'age_value': age_value, 'age_dict': age_dict})
+
+
+def friends_hobby(req):
+    data_list = friends_info.objects.all()
+    hobby_list = []
+    for obj in data_list:
+        hobby_list.append(obj.hobby)
+    # print(hobby_list)
+    with open(r'web/static/plugins/stopwords_list.txt', 'r', encoding='utf-8') as s:
+        stopwords = s.read()
+        stopwords_list = stopwords.split('\n')
+
+    words_count = {}
+    for i in range(len(hobby_list)):
+        words = jieba.analyse.textrank(hobby_list[i], topK=20, withWeight=False, allowPOS=('n', 'v', 'd'))
+        # words = jieba.analyse.textrank(text_list[i], topK=20, withWeight=False)
+        for word in words:
+            if word not in stopwords_list:
+                if word not in words_count:
+                    words_count[word] = 1
+                else:
+                    words_count[word] += 1
+
+    words_count_sorted = dict(collections.OrderedDict(sorted(words_count.items(), key=lambda dc: dc[1], reverse=False)))
+    # print(words_count_sorted)
+
+    hobby_keys = list(words_count_sorted.keys())[-20:]
+    print(hobby_keys)
+    hobby_values = list(words_count_sorted.values())[-20:]
+
+    return render(req, 'friends_hobby.html', {'hobby_keys': hobby_keys, 'hobby_values': hobby_values})

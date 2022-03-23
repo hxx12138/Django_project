@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <h1 class="text-center">爱好词频统计</h1>
+        <div id="main" style="width: 1200px;height:600px;"></div>
+        <script type="text/javascript">
+            var chartDom = document.getElementById('main');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            option = {
+                title: {
+                    text: '爱好词频Top20'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {},
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    boundaryGap: [0, 0.01]
+                },
+                yAxis: {
+                    type: 'category',
+                    data: {% autoescape off %}{{ hobby_keys }}{% endautoescape %}
+                },
+                series: [
+                    {
+                        name: '词频',
+                        type: 'bar',
+                        data: {{ hobby_values }}
+                    },
+                ]
+            };
+
+            option && myChart.setOption(option);
+        </script>
+    </div>
+
+{% endblock %}

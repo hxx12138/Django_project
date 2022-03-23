@@ -31,4 +31,5 @@ urlpatterns = [
     path('friends/delete', views.friends_delete),
     path('friends/edit', views.friends_edit),
     path('friends/echart', views.friends_echart),
+    path('friends/hobby', views.friends_hobby),
 ]
