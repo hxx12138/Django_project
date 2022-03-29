@@ -1,165 +1,124 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    {% load static %}
     <div id="container">
+        <canvas data-engine="three.js r139" width="1036" height="1878"
+                style="display: block; width: 518px; height: 939px; touch-action: none;"></canvas>
+    </div>
 
-        <div id="info">
-            <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> webgl - animation - keyframes<br/>
-            Model: <a href="https://artstation.com/artwork/1AGwX" target="_blank" rel="noopener">Littlest Tokyo</a> by
-            <a href="https://artstation.com/glenatron" target="_blank" rel="noopener">Glen Fox</a>, CC Attribution.
-        </div>
+    <div id="info">
+        <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> webgl - animation - keyframes<br/>
+        Model: <a href="https://artstation.com/artwork/1AGwX" target="_blank" rel="noopener">Littlest Tokyo</a> by
+        <a href="https://artstation.com/glenatron" target="_blank" rel="noopener">Glen Fox</a>, CC Attribution.
+    </div>
 
-        <!-- Import maps polyfill -->
-        <!-- Remove this when import maps will be widely supported -->
-        <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
 
-        <script type="importmap">
+    <script type="importmap">
 			{
 				"imports": {
-					"three": "../build/three.module.js"
-				}
-			}
-
-        <div id="container"></div>
-
-		<div id="info">
-			<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> webgl - animation - keyframes<br/>
-			Model: <a href="https://artstation.com/artwork/1AGwX" target="_blank" rel="noopener">Littlest Tokyo</a> by
-			<a href="https://artstation.com/glenatron" target="_blank" rel="noopener">Glen Fox</a>, CC Attribution.
-		</div>
-
-		<!-- Import maps polyfill -->
-		<!-- Remove this when import maps will be widely supported -->
-		<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js">
-
-        </script>
-
-        <script type="importmap">
-			{
-				"imports": {
-					"three": "../build/three.module.js"
+					"three": "three/build/three.module.js"
 				}
 			}
 
 
 
+    </script>
 
-        </script>
+    <script type="module">
 
-        <div id="container"></div>
+        import * as THREE from 'three';
 
-        <div id="info">
-            <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> webgl - animation - keyframes<br/>
-            Model: <a href="https://artstation.com/artwork/1AGwX" target="_blank" rel="noopener">Littlest Tokyo</a> by
-            <a href="https://artstation.com/glenatron" target="_blank" rel="noopener">Glen Fox</a>, CC Attribution.
-        </div>
+        import Stats from 'three/examples/jsm/libs/stats.module.js';
 
-        <!-- Import maps polyfill -->
-        <!-- Remove this when import maps will be widely supported -->
-        <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+        import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+        import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 
-        <script type="importmap">
-			{
-				"imports": {
-					"three": "../build/three.module.js"
-				}
-			}
+        import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+        import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader.js';
 
-        </script>
+        let mixer;
 
-        <script type="module">
+        const clock = new THREE.Clock();
+        const container = document.getElementById('container');
 
-            import * as THREE from 'three';
+        const stats = new Stats();
+        container.appendChild(stats.dom);
 
-            import Stats from './jsm/libs/stats.module.js';
+        const renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        container.appendChild(renderer.domElement);
 
-            import {OrbitControls} from './jsm/controls/OrbitControls.js';
-            import {RoomEnvironment} from './jsm/environments/RoomEnvironment.js';
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
 
-            import {GLTFLoader} from './jsm/loaders/GLTFLoader.js';
-            import {DRACOLoader} from './jsm/loaders/DRACOLoader.js';
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xbfe3dd);
+        scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
-            let mixer;
+        const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 100);
+        camera.position.set(5, 2, 8);
 
-            const clock = new THREE.Clock();
-            const container = document.getElementById('container');
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.target.set(0, 0.5, 0);
+        controls.update();
+        controls.enablePan = false;
+        controls.enableDamping = true;
 
-            const stats = new Stats();
-            container.appendChild(stats.dom);
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('node_modules/three/examples/js/libs/draco/gltf/');
 
-            const renderer = new THREE.WebGLRenderer({antialias: true});
-            renderer.setPixelRatio(window.devicePixelRatio);
+        const loader = new GLTFLoader();
+        loader.setDRACOLoader(dracoLoader);
+        loader.load('node_modules/three/examples/models/gltf/LittlestTokyo.glb', function (gltf) {
+
+            const model = gltf.scene;
+            model.position.set(1, 1, 0);
+            model.scale.set(0.01, 0.01, 0.01);
+            scene.add(model);
+
+            mixer = new THREE.AnimationMixer(model);
+            mixer.clipAction(gltf.animations[0]).play();
+
+            animate();
+
+        }, undefined, function (e) {
+
+            console.error(e);
+
+        });
+
+
+        window.onresize = function () {
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.outputEncoding = THREE.sRGBEncoding;
-            container.appendChild(renderer.domElement);
 
-            const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        };
 
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xbfe3dd);
-            scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
-            const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 100);
-            camera.position.set(5, 2, 8);
+        function animate() {
 
-            const controls = new OrbitControls(camera, renderer.domElement);
-            controls.target.set(0, 0.5, 0);
+            requestAnimationFrame(animate);
+
+            const delta = clock.getDelta();
+
+            mixer.update(delta);
+
             controls.update();
-            controls.enablePan = false;
-            controls.enableDamping = true;
 
-            const dracoLoader = new DRACOLoader();
-            dracoLoader.setDecoderPath('js/libs/draco/gltf/');
+            stats.update();
 
-            const loader = new GLTFLoader();
-            loader.setDRACOLoader(dracoLoader);
-            loader.load('models/gltf/LittlestTokyo.glb', function (gltf) {
+            renderer.render(scene, camera);
 
-                const model = gltf.scene;
-                model.position.set(1, 1, 0);
-                model.scale.set(0.01, 0.01, 0.01);
-                scene.add(model);
-
-                mixer = new THREE.AnimationMixer(model);
-                mixer.clipAction(gltf.animations[0]).play();
-
-                animate();
-
-            }, undefined, function (e) {
-
-                console.error(e);
-
-            });
+        }
 
 
-            window.onresize = function () {
-
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-
-                renderer.setSize(window.innerWidth, window.innerHeight);
-
-            };
-
-
-            function animate() {
-
-                requestAnimationFrame(animate);
-
-                const delta = clock.getDelta();
-
-                mixer.update(delta);
-
-                controls.update();
-
-                stats.update();
-
-                renderer.render(scene, camera);
-
-            }
-
-
-        </script>
+    </script>
 
 {% endblock %}
