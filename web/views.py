@@ -77,8 +77,8 @@ def data_process():
 
 
 def friends_info_list(req):
-    # data_list = friends_info.objects.all()
-    data_list = friends_info.objects.all().order_by('birthday')
+    data_list = friends_info.objects.all()
+    #data_list = friends_info.objects.all().order_by('birthday')
 
     return render(req, "friends_info.html", {"data_list": data_list})
 
@@ -170,7 +170,7 @@ def friends_hobby(req):
     # print(words_count_sorted)
 
     hobby_keys = list(words_count_sorted.keys())[-20:]
-    print(hobby_keys)
+    #print(hobby_keys)
     hobby_values = list(words_count_sorted.values())[-20:]
 
     return render(req, 'friends_hobby.html', {'hobby_keys': hobby_keys, 'hobby_values': hobby_values})
