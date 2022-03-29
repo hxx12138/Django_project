@@ -174,3 +174,6 @@ def friends_hobby(req):
     hobby_values = list(words_count_sorted.values())[-20:]
 
     return render(req, 'friends_hobby.html', {'hobby_keys': hobby_keys, 'hobby_values': hobby_values})
+
+def project_3D(req):
+    return render(req, 'friends_project_3D.html')

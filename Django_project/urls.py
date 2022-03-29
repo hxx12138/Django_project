@@ -32,4 +32,5 @@ urlpatterns = [
     path('friends/edit', views.friends_edit),
     path('friends/echart', views.friends_echart),
     path('friends/hobby', views.friends_hobby),
+    path('friends/project_3D', views.project_3D),
 ]
