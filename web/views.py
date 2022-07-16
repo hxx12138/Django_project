@@ -77,8 +77,8 @@ def data_process():
 
 
 def friends_info_list(req):
-    data_list = friends_info.objects.all()
-    #data_list = friends_info.objects.all().order_by('birthday')
+    #data_list = friends_info.objects.all()
+    data_list = friends_info.objects.all().order_by('birthday')
 
     return render(req, "friends_info.html", {"data_list": data_list})
 
