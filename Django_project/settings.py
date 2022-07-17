@@ -80,11 +80,22 @@ WSGI_APPLICATION = 'Django_project.wsgi.application'
     }
 }'''
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'hxx',  # 数据库名字
         'USER': 'root',
+        'PASSWORD': 'hexihexiang2000',
+        'HOST': '127.0.0.1',  # 那台机器安装了MySQL
+        'PORT': 3306,
+    }
+}'''
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'hxx',  # 数据库名字
+        'USER': 'hxx',
         'PASSWORD': 'hexihexiang2000',
         'HOST': '127.0.0.1',  # 那台机器安装了MySQL
         'PORT': 3306,
